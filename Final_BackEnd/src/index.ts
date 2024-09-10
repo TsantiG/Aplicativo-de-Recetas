@@ -2,7 +2,7 @@ import express from 'express';
 import cors from 'cors'
 import helmet from 'helmet';
 import morgan from 'morgan';
-import loginRoutes from './routes/login';
+import loginRoutes from './routes/login.route';
 import recetasRoutes from './routes/recetas';
 import dotenv from 'dotenv';
 

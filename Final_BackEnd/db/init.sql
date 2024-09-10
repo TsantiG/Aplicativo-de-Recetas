@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS usuarios (
   creado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE IF NOT EXISTS region(
+CREATE TABLE IF NOT EXISTS regiones(
   id INT AUTO_INCREMENT PRIMARY KEY,
   region VARCHAR(100)
 );
@@ -40,7 +40,7 @@ CREATE TABLE IF NOT EXISTS compartirRecetas(
   FOREIGN KEY (id_usuario) REFERENCES usuarios(id) ON DELETE CASCADE,
   FOREIGN KEY (id_receta) REFERENCES recetas(id) ON DELETE CASCADE,
   FOREIGN KEY (id_tipo) REFERENCES tipos(id),
-  FOREIGN KEY (id_region) REFERENCES region(id)
+  FOREIGN KEY (id_region) REFERENCES regiones(id)
 );
 
 CREATE TABLE IF NOT EXISTS comentarReceta(
