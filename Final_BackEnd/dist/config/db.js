@@ -20,5 +20,10 @@ async function initializeDB() {
         process.exit(1);
     }
 }
-// Exportamos tanto el pool como la función para inicializarlo
-export { pool, initializeDB };
+function getPool() {
+    if (!pool) {
+        throw new Error("La base de datos no ha sido inicializada.");
+    }
+    return pool;
+}
+export { initializeDB, getPool };

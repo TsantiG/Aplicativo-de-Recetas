@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-let pool: mysql.Pool;
+let pool: mysql.Pool | undefined;
 
 async function initializeDB() {
   try {
@@ -16,7 +16,6 @@ async function initializeDB() {
       connectionLimit: 10,
       queueLimit: 0,
     });
-
     console.log('Conexión a la base de datos establecida');
   } catch (error) {
     console.error('Error al conectar a la base de datos:', error);
@@ -24,5 +23,11 @@ async function initializeDB() {
   }
 }
 
-// Exportamos tanto el pool como la función para inicializarlo
-export { pool, initializeDB };
+function getPool(): mysql.Pool {
+  if (!pool) {
+    throw new Error("La base de datos no ha sido inicializada.");
+  }
+  return pool;
+}
+
+export { initializeDB, getPool };

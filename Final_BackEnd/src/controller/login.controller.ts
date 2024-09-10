@@ -1,6 +1,9 @@
 import { Pool, ResultSetHeader } from 'mysql2/promise';
 import { Usuario } from '../interfaces/login.interface';
+
+
 import bcrypt from 'bcryptjs';
+
 
 class QueryAsync {
   private database: Pool;
@@ -46,16 +49,13 @@ class QueryAsync {
   }
 
   // Crear usuario (para registro)
-  async createUser(user: { nombre: any; correo: any; password: string }): Promise<number> {
+  async createUser(user: { nombre: string; correo: string; password_hash: string }): Promise<number> {
     const sql = "INSERT INTO usuarios (nombre, correo, password_hash) VALUES (?, ?, ?)";
     try {
-      // Hashear la contraseña antes de almacenarla
-      const hashedPassword = await bcrypt.hash(user.password, 10);
-
-      const [result] = await this.database.query<ResultSetHeader>(sql, [user.nombre, user.correo, hashedPassword]);
+      const [result] = await this.database.query<ResultSetHeader>(sql, [user.nombre, user.correo, user.password_hash]);
       return result.insertId;  // Retorna el ID del nuevo usuario
     } catch (err) {
-      console.error("Error creating user: ", err);
+      console.error("Error creando usuario:", err);
       throw err;
     }
   }
@@ -84,9 +84,13 @@ class QueryAsync {
     }
   }
 
-  // Validar contraseña (comparar hash)
   async validatePassword(password: string, hashedPassword: string): Promise<boolean> {
-    return bcrypt.compare(password, hashedPassword);
+    try {
+      return await bcrypt.compare(password, hashedPassword);
+    } catch (err) {
+      console.error("Error comparando contraseña:", err);
+      throw err;
+    }
   }
 }
 
