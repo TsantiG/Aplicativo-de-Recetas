@@ -1,7 +1,6 @@
-import { Pool, ResultSetHeader }   from 'mysql2/promise';
+import { Pool, ResultSetHeader } from 'mysql2/promise';
 import { Usuario } from '../interfaces/login.interface';
 import bcrypt from 'bcryptjs';
-
 
 class QueryAsync {
   private database: Pool;
@@ -10,6 +9,19 @@ class QueryAsync {
     this.database = database;
   }
 
+  // Obtener usuario por correo (para login)
+  async getUserByEmail(correo: string): Promise<Usuario | null> {
+    const sql = "SELECT * FROM usuarios WHERE correo = ?";
+    try {
+      const [rows] = await this.database.query<Usuario[]>(sql, [correo]);
+      return rows[0] || null;
+    } catch (err) {
+      console.error("Error getting user by email: ", err);
+      throw err;
+    }
+  }
+
+  // Obtener todos los usuarios (opcional)
   async getAllUsers(): Promise<Usuario[]> {
     const sql = "SELECT * FROM usuarios";
     try {
@@ -21,6 +33,7 @@ class QueryAsync {
     }
   }
 
+  // Obtener usuario por ID (para perfil o uso interno)
   async getUserById(userid: number): Promise<Usuario | null> {
     const sql = "SELECT * FROM usuarios WHERE id = ?";
     try {
@@ -32,26 +45,14 @@ class QueryAsync {
     }
   }
 
-  async getUserByUsername(username: string): Promise<Usuario | null> {
-    const sql = "SELECT * FROM usuarios WHERE nombre = ?";
-    try {
-      const [rows] = await this.database.query<Usuario[]>(sql, [username]);
-      return rows[0] || null;
-    } catch (err) {
-      console.error("Error getting user by username: ", err);
-      throw err;
-    }
-  }
-
-
-
-  async createUser(user: { nombre: string; password: string }): Promise<number> {
-    const sql = "INSERT INTO usuarios (nombre, password_hash) VALUES (?, ?)";
+  // Crear usuario (para registro)
+  async createUser(user: { nombre: any; correo: any; password: string }): Promise<number> {
+    const sql = "INSERT INTO usuarios (nombre, correo, password_hash) VALUES (?, ?, ?)";
     try {
       // Hashear la contraseña antes de almacenarla
       const hashedPassword = await bcrypt.hash(user.password, 10);
 
-      const [result] = await this.database.query<ResultSetHeader>(sql, [user.nombre, hashedPassword]);
+      const [result] = await this.database.query<ResultSetHeader>(sql, [user.nombre, user.correo, hashedPassword]);
       return result.insertId;  // Retorna el ID del nuevo usuario
     } catch (err) {
       console.error("Error creating user: ", err);
@@ -59,6 +60,7 @@ class QueryAsync {
     }
   }
 
+  // Actualizar usuario (si es necesario modificar nombre o contraseña)
   async updateUser(userid: number, user: { nombre: string; password_hash: string }): Promise<number> {
     const sql = "UPDATE usuarios SET nombre = ?, password_hash = ? WHERE id = ?";
     try {
@@ -70,6 +72,7 @@ class QueryAsync {
     }
   }
 
+  // Eliminar usuario
   async deleteUser(userid: number): Promise<number> {
     const sql = "DELETE FROM usuarios WHERE id = ?";
     try {
@@ -80,6 +83,8 @@ class QueryAsync {
       throw err;
     }
   }
+
+  // Validar contraseña (comparar hash)
   async validatePassword(password: string, hashedPassword: string): Promise<boolean> {
     return bcrypt.compare(password, hashedPassword);
   }
