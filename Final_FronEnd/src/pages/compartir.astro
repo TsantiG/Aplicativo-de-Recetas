@@ -2,16 +2,23 @@
 import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header'
 import Footer from '../components/Footer';
+const imgUrl='https://res.cloudinary.com/dstpvt64c/image/upload/v1726074707/logo_1_qereih.png';
 ---
 
 <Layout title="Guarda y Comparte tus Recetas.">
     <div class="min-h-screen flex flex-col">
+      <div class="relative min-h-screen flex flex-col">
+        <div class="absolute top-[-10px] left-7 z-20">
+          <a href="#"><img class="h-40 w-40" src={imgUrl} alt="Logo" /></a>
+        </div>
+        <Header />
         <Header />
         <main class="flex-grow pt-20">
          
         </main>
         <Footer />
       </div>
+    </div>
 </Layout>
 
 
