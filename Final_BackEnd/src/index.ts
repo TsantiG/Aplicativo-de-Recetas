@@ -27,7 +27,8 @@ const app = express();
   app.use('/api/upload', img.default);  
   const recetasRoutes = await import('./routes/recetas.route.js')
   app.use('/api/recetas', recetasRoutes.default);
-
+  const compartir = await import('./routes/compartir.route.js')
+  app.use('/api/compartir', compartir.default)
 
 
   // Iniciar el servidor
