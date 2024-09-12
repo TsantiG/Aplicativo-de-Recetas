@@ -25,6 +25,8 @@ const app = express();
   app.use('/api', loginRoutes.default);  
   const img = await import('./routes/imges.route.js')
   app.use('/api/upload', img.default);  
+  const recetasRoutes = await import('./routes/recetas.route.js')
+  app.use('/api/recetas', recetasRoutes.default);
 
 
 

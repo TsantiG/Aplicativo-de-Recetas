@@ -3,12 +3,12 @@ import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import dotenv from 'dotenv';
-import { initializeDB } from './config/db.js'; // Importar el inicializador de la base de datos
+import { initializeDB } from './config/db.js';
 dotenv.config();
 const app = express();
 (async () => {
     // Inicializar la base de datos
-    await initializeDB(); // Espera a que la base de datos esté conectada
+    await initializeDB();
     // Middlewares
     app.use(cors());
     app.use(helmet());
@@ -16,9 +16,11 @@ const app = express();
     app.use(express.json());
     // Importar rutas después de inicializar la base de datos
     const loginRoutes = await import('./routes/login.route.js');
-    app.use('/api', loginRoutes.default); // Usar rutas una vez que estén importadas
+    app.use('/api', loginRoutes.default);
     const img = await import('./routes/imges.route.js');
-    app.use('/api/upload', img.default); // Asegúrate de usar la ruta correcta
+    app.use('/api/upload', img.default);
+    const recetasRoutes = await import('./routes/recetas.route.js');
+    app.use('/api/recetas', recetasRoutes.default);
     // Iniciar el servidor
     const PORT = process.env.PORT || 3000;
     app.listen(PORT, () => {

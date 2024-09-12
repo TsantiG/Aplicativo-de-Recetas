@@ -1,4 +1,6 @@
-export interface Receta {
+import { RowDataPacket } from 'mysql2';
+
+export interface Receta extends RowDataPacket {
     id: number;
     nombre: string;
     descripcion: string;

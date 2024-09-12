@@ -1,7 +1,6 @@
 import cloudinary from 'cloudinary';
 import dotenv from 'dotenv';
 dotenv.config();
-// Configuración de Cloudinary
 cloudinary.v2.config({
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME || 'dstpvt64c',
     api_key: process.env.CLOUDINARY_API_KEY || '659547838485621',

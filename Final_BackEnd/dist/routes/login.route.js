@@ -26,7 +26,7 @@ router.post('/register', async (req, res) => {
     }
     catch (err) {
         if (err instanceof Error) {
-            console.error("Error creando usuario:", err); // Registrar el error completo
+            console.error("Error creando usuario:", err);
             res.status(500).json({ message: 'Error al crear usuario', error: err.message });
         }
         else {
@@ -56,7 +56,7 @@ router.post('/login', async (req, res) => {
     }
     catch (err) {
         if (err instanceof Error) {
-            console.error("Error creando usuario:", err); // Registrar el error completo
+            console.error("Error creando usuario:", err);
             res.status(500).json({ message: 'Error al iniciar sesión', error: err.message });
         }
         else {
@@ -96,7 +96,7 @@ router.get('/user/:id', async (req, res) => {
     }
     catch (err) {
         if (err instanceof Error) {
-            console.error("Error creando usuario:", err); // Registrar el error completo
+            console.error("Error creando usuario:", err);
             res.status(500).json({ message: 'Error al buscar usuario', error: err.message });
         }
         else {
@@ -120,7 +120,7 @@ router.delete('/user/:id', async (req, res) => {
     }
     catch (err) {
         if (err instanceof Error) {
-            console.error("Error creando usuario:", err); // Registrar el error completo
+            console.error("Error creando usuario:", err);
             res.status(500).json({ message: 'Error al eliminar usuario', error: err.message });
         }
         else {
