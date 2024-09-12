@@ -24,10 +24,21 @@ class CompartirRecetasController {
     // Obtener todas las recetas compartidas
     async getAllCompartidas() {
         const sql = `
-      SELECT cr.*, u.nombre as usuario_nombre, r.nombre as receta_nombre 
-      FROM compartirRecetas cr
-      JOIN usuarios u ON cr.id_usuario = u.id
-      JOIN recetas r ON cr.id_receta = r.id
+      SELECT cr.*, 
+       u.nombre AS usuario_nombre, 
+       r.nombre AS receta_nombre, 
+       r.descripcion, 
+       r.instrucciones, 
+       r.ingredientes, 
+       r.imagen_url, 
+       r.video_url, 
+       t.tipo AS tipo_receta, 
+       rg.region AS region_receta
+FROM compartirRecetas cr
+JOIN usuarios u ON cr.id_usuario = u.id
+JOIN recetas r ON cr.id_receta = r.id
+JOIN tipos t ON cr.id_tipo = t.id
+JOIN regiones rg ON cr.id_region = rg.id;
     `;
         try {
             const [rows] = await this.pool.query(sql);

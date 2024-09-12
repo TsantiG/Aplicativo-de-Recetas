@@ -29,7 +29,10 @@ const app = express();
   app.use('/api/recetas', recetasRoutes.default);
   const compartir = await import('./routes/compartir.route.js')
   app.use('/api/compartir', compartir.default)
-
+  const comentar = await import('./routes/comentar.route.js')
+  app.use('/api/comentar', comentar.default)
+  const calificar = await import('./routes/calificar.route.js')
+  app.use('/api/calificar', calificar.default)
 
   // Iniciar el servidor
   const PORT = process.env.PORT || 3000;
