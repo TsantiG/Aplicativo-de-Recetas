@@ -62,6 +62,15 @@ CREATE TABLE IF NOT EXISTS calificarReceta(
   FOREIGN KEY (id_receta) REFERENCES recetas(id) ON DELETE CASCADE
 );
 
+CREATE TABLE IF NOT EXISTS usuarios_fotos (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  id_usuario INT,
+  url_foto VARCHAR(255) NOT NULL,
+  creado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (id_usuario) REFERENCES usuarios(id) ON DELETE CASCADE
+);
+
+
 INSERT INTO regiones(region) VALUES("Colombiana"), ("Mexicana"), ("China"), ("Japonesa"), ("Rusa"), ("India"), ("Estado Unidence"), ("Española"), ("Francesa"), ("Inglesa");
 
 INSERT INTO tipos(tipo) VALUES ("Guisados"), ("Sopas"), ("Ensaladas"), ("Acompañantes"), ("Comida Rapida"), ("Pescado"), ("Pasta");

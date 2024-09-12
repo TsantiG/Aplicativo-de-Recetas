@@ -31,7 +31,7 @@ router.post('/register', async (req, res) => {
     res.status(201).json({ message: 'Usuario creado con éxito', userId });
   } catch (err) {
     if (err instanceof Error) {
-      console.error("Error creando usuario:", err);  // Registrar el error completo
+      console.error("Error creando usuario:", err); 
       res.status(500).json({ message: 'Error al crear usuario', error: err.message });
     } else {
       console.error("Error desconocido:", err);
@@ -66,7 +66,7 @@ router.post('/login', async (req, res) => {
     res.json({ message: 'Login exitoso' });
   } catch (err) {
     if (err instanceof Error) {
-      console.error("Error creando usuario:", err);  // Registrar el error completo
+      console.error("Error creando usuario:", err);  
       res.status(500).json({ message: 'Error al iniciar sesión', error: err.message });
     } else {
       console.error("Error desconocido:", err);
@@ -115,7 +115,7 @@ router.get('/user/:id', async (req, res) => {
     res.json(user);
   } catch (err) {
     if (err instanceof Error) {
-      console.error("Error creando usuario:", err);  // Registrar el error completo
+      console.error("Error creando usuario:", err);  
       res.status(500).json({ message: 'Error al buscar usuario', error: err.message });
     } else {
       console.error("Error desconocido:", err);
@@ -142,7 +142,7 @@ router.delete('/user/:id', async (req, res) => {
     res.json({ message: 'Usuario eliminado con éxito' });
   } catch (err) {
     if (err instanceof Error) {
-      console.error("Error creando usuario:", err);  // Registrar el error completo
+      console.error("Error creando usuario:", err);  
       res.status(500).json({ message: 'Error al eliminar usuario', error: err.message });
     } else {
       console.error("Error desconocido:", err);
