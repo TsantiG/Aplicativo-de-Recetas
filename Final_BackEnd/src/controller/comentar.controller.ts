@@ -1,5 +1,6 @@
 import { Pool, ResultSetHeader } from 'mysql2/promise';
 import { getPool } from '../config/db.js';
+import { Comentar } from '../interfaces/comentar.interface.js';
 
 class ComentarRecetaController {
   private pool: Pool;
@@ -38,6 +39,19 @@ class ComentarRecetaController {
       return rows;
     } catch (err) {
       console.error("Error al obtener los comentarios de la receta:", err);
+      throw err;
+    }
+  }
+  async getComentarById(id: number):Promise<Comentar | null>{
+    const sql = "SELECT * FROM comentarReceta WHERE id = ?";
+    try {
+      const [rows] = await this.pool.query<Comentar[]>(sql, [id]);
+      if (rows.length === 0) {
+        throw new Error('comentario compartido no encontrado');
+      }
+      return rows[0] || null;
+    } catch (err) {
+      console.error("Error al obtener el comentario:", err);
       throw err;
     }
   }

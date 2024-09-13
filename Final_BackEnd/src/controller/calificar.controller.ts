@@ -60,6 +60,20 @@ class CalificarRecetaController {
     }
   }
 
+  async getCalificarById(id: number):Promise<calificar | null>{
+    const sql = "SELECT * FROM calificarReceta WHERE id = ?";
+    try {
+      const [rows] = await this.pool.query<calificar[]>(sql, [id]);
+      if (rows.length === 0) {
+        throw new Error('calificaion no encontrada');
+      }
+      return rows[0] || null;
+    } catch (err) {
+      console.error("Error al obtener la calificacion:", err);
+      throw err;
+    }
+  }
+
   // Eliminar una calificación por ID
   async deleteCalificacion(id: number) {
     const sql = "DELETE FROM calificarReceta WHERE id = ?";

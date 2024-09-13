@@ -1,12 +1,15 @@
 import express from 'express';
 import ComentarRecetaController from '../controller/comentar.controller.js';
-
+import authMiddleware from '../middleware/authMiddleware.js'; 
 const router = express.Router();
 const comentarController = new ComentarRecetaController();
 
+
+
 // Comentar una receta
-router.post('/comentar', async (req, res) => {
-  const { id_usuario, id_receta, comentario } = req.body;
+router.post('/comentar', authMiddleware, async (req, res) => {
+  const {  id_receta, comentario } = req.body;
+  const id_usuario = (req as any).userId;
   try {
     const comentarioId = await comentarController.comentarReceta({ id_usuario, id_receta, comentario });
     res.status(201).json({ message: 'Comentario agregado con éxito', comentarioId });
@@ -39,9 +42,19 @@ router.get('/receta/:id', async (req, res) => {
 });
 
 // Eliminar un comentario
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', authMiddleware, async (req, res) => {
   const { id } = req.params;
+  const id_usuario = (req as any).userId;
   try {
+    const comentarioExistente = await comentarController.getComentarById(Number(id));
+
+    if (!comentarioExistente) {
+      return res.status(404).json({ message: 'Receta no encontrada' });
+    }
+
+    if (comentarioExistente.id_usuario !== id_usuario) {
+      return res.status(403).json({ message: 'No tienes permiso para eliminar esta calificación' });
+    }
     const deletedRows = await comentarController.deleteComentario(Number(id));
     if (deletedRows === 0) {
       res.status(404).json({ message: 'Comentario no encontrado' });

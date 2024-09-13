@@ -66,6 +66,20 @@ JOIN regiones rg ON cr.id_region = rg.id;
             throw err;
         }
     }
+    async getCompartidasById(id) {
+        const sql = "SELECT * FROM compartirRecetas WHERE id = ?";
+        try {
+            const [rows] = await this.pool.query(sql, [id]);
+            if (rows.length === 0) {
+                throw new Error('Receta compartida no encontrada');
+            }
+            return rows[0] || null;
+        }
+        catch (err) {
+            console.error("Error al obtener la receta compartida:", err);
+            throw err;
+        }
+    }
     // Eliminar una receta compartida
     async deleteCompartir(id) {
         const sql = "DELETE FROM compartirRecetas WHERE id = ?";

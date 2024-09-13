@@ -1,12 +1,14 @@
 import express from 'express';
 import CalificarRecetaController from '../controller/calificar.controller.js';
+import authMiddleware from '../middleware/authMiddleware.js'; 
 
 const router = express.Router();
 const calificarController = new CalificarRecetaController();
 
 // Calificar una receta
-router.post('/calificar', async (req, res) => {
-  const { id_usuario, id_receta, calificacion } = req.body;
+router.post('/calificar', authMiddleware, async (req, res) => {
+  const { id_receta, calificacion } = req.body;
+  const id_usuario = (req as any).userId;
   if (calificacion < 1 || calificacion > 5) {
     return res.status(400).json({ message: 'La calificación debe estar entre 1 y 5' });
   }
@@ -59,9 +61,20 @@ router.get('/receta/:id/promedio', async (req, res) => {
 });
 
 // Eliminar una calificación
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', authMiddleware, async (req, res) => {
   const { id } = req.params;
+  const id_usuario = (req as any).userId;
   try {
+    
+    const calificacionExistente = await calificarController.getCalificarById(Number(id));
+
+    if (!calificacionExistente) {
+      return res.status(404).json({ message: 'Receta no encontrada' });
+    }
+
+    if (calificacionExistente.id_usuario !== id_usuario) {
+      return res.status(403).json({ message: 'No tienes permiso para eliminar esta calificación' });
+    }
     const deletedRows = await calificarController.deleteCalificacion(Number(id));
     if (deletedRows === 0) {
       res.status(404).json({ message: 'Calificación no encontrada' });

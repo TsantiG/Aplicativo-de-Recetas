@@ -1,9 +1,10 @@
 import express from 'express';
 import RecetasController from '../controller/recetas.controller.js';
+import authMiddleware from '../middleware/authMiddleware.js';
 const router = express.Router();
 const recetasController = new RecetasController();
 // Crear una nueva receta
-router.post('/create', async (req, res) => {
+router.post('/create', authMiddleware, async (req, res) => {
     const receta = req.body;
     try {
         const recetaId = await recetasController.createReceta(receta);
@@ -21,7 +22,7 @@ router.post('/create', async (req, res) => {
     }
 });
 // Obtener todas las recetas
-router.get('/all', async (req, res) => {
+router.get('/all', authMiddleware, async (req, res) => {
     try {
         const recetas = await recetasController.getAllRecetas();
         res.json(recetas);
@@ -38,7 +39,7 @@ router.get('/all', async (req, res) => {
     }
 });
 // Obtener una receta por ID
-router.get('/:id', async (req, res) => {
+router.get('/:id', authMiddleware, async (req, res) => {
     const { id } = req.params;
     try {
         const receta = await recetasController.getRecetaById(Number(id));
@@ -56,13 +57,23 @@ router.get('/:id', async (req, res) => {
     }
 });
 // Actualizar una receta
-router.put('/:id', async (req, res) => {
+router.put('/:id', authMiddleware, async (req, res) => {
     const { id } = req.params;
     const receta = req.body;
+    const userId = req.userId;
     try {
+        const recetaExistente = await recetasController.getRecetaById(Number(id));
+        if (!recetaExistente) {
+            return res.status(404).json({ message: 'Receta no encontrada' });
+        }
+        // Verificar si el usuario es el dueño de la receta
+        if (recetaExistente.id_usuario !== userId) {
+            return res.status(403).json({ message: 'No tienes permiso para editar esta receta' });
+        }
+        // Actualizar la receta si el usuario es el dueño
         const updatedRows = await recetasController.updateReceta(Number(id), receta);
         if (updatedRows === 0) {
-            res.status(404).json({ message: 'Receta no encontrada' });
+            return res.status(404).json({ message: 'Receta no encontrada' });
         }
         else {
             res.json({ message: 'Receta actualizada con éxito' });
@@ -70,19 +81,27 @@ router.put('/:id', async (req, res) => {
     }
     catch (err) {
         if (err instanceof Error) {
-            console.error("Error al actualizar recetas:", err);
-            res.status(500).json({ message: 'Error al actualizar recetas', error: err.message });
+            console.error("Error al actualizar receta:", err);
+            res.status(500).json({ message: 'Error al actualizar receta', error: err.message });
         }
         else {
             console.error("Error desconocido:", err);
-            res.status(500).json({ message: 'Error desconocido al actualizar recetas' });
+            res.status(500).json({ message: 'Error desconocido al actualizar receta' });
         }
     }
 });
 // Eliminar una receta
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', authMiddleware, async (req, res) => {
     const { id } = req.params;
+    const userId = req.userId;
     try {
+        const recetaExistente = await recetasController.getRecetaById(Number(id));
+        if (!recetaExistente) {
+            return res.status(404).json({ message: 'Receta no encontrada' });
+        }
+        if (recetaExistente.id_usuario !== userId) {
+            return res.status(403).json({ message: 'No tienes permiso para eliminar esta calificación' });
+        }
         const deletedRows = await recetasController.deleteReceta(Number(id));
         if (deletedRows === 0) {
             res.status(404).json({ message: 'Receta no encontrada' });

@@ -3,6 +3,7 @@ import session from 'express-session';
 import QueryAsync from '../controller/login.controller.js';
 import { getPool } from '../config/db.js';  // Obtener el pool inicializado
 import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken'; 
 
 const router = Router();
 const query = new QueryAsync(getPool());  // Pasar el pool inicializado al controlador
@@ -60,10 +61,13 @@ router.post('/login', async (req, res) => {
     if (!isPasswordValid) {
       return res.status(400).json({ message: 'Contraseña incorrecta' });
     }
+    const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET || 'mySuperSecretKey', {
+      expiresIn: '24h',  // proteccion de las rutas 
+    });
 
     // Establecer sesión
     (req.session as any).userId = user.id;
-    res.json({ message: 'Login exitoso' });
+    res.json({ message: 'Login exitoso', token, userId: user.id });
   } catch (err) {
     if (err instanceof Error) {
       console.error("Error creando usuario:", err);  

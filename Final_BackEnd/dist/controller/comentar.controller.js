@@ -38,6 +38,20 @@ class ComentarRecetaController {
             throw err;
         }
     }
+    async getComentarById(id) {
+        const sql = "SELECT * FROM comentarReceta WHERE id = ?";
+        try {
+            const [rows] = await this.pool.query(sql, [id]);
+            if (rows.length === 0) {
+                throw new Error('comentario compartido no encontrado');
+            }
+            return rows[0] || null;
+        }
+        catch (err) {
+            console.error("Error al obtener el comentario:", err);
+            throw err;
+        }
+    }
     // Eliminar un comentario por ID
     async deleteComentario(id) {
         const sql = "DELETE FROM comentarReceta WHERE id = ?";

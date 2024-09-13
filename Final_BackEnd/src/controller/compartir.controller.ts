@@ -1,5 +1,6 @@
 import { Pool, ResultSetHeader } from 'mysql2/promise';
 import { getPool } from '../config/db.js';  // Asegúrate de que getPool esté configurado correctamente
+import { Compartir } from '../interfaces/compartir.interface.js';
 
 class CompartirRecetasController {
   private pool: Pool;
@@ -66,6 +67,20 @@ JOIN regiones rg ON cr.id_region = rg.id;
       return rows;
     } catch (err) {
       console.error("Error al obtener las recetas compartidas por el usuario:", err);
+      throw err;
+    }
+  }
+
+  async getCompartidasById(id: number):Promise<Compartir | null>{
+    const sql = "SELECT * FROM compartirRecetas WHERE id = ?";
+    try {
+      const [rows] = await this.pool.query<Compartir[]>(sql, [id]);
+      if (rows.length === 0) {
+        throw new Error('Receta compartida no encontrada');
+      }
+      return rows[0] || null;
+    } catch (err) {
+      console.error("Error al obtener la receta compartida:", err);
       throw err;
     }
   }
