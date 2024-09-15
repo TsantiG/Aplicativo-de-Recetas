@@ -11,6 +11,8 @@ const VerRecetas = () => {
         const response = await fetch('http://localhost:3000/api/recetas'); // Asegúrate de que la URL de tu API esté bien configurada
         const data = await response.json();
 
+        console.log('se conento o no?');
+
         if (response.ok) {
           setRecetas(data); // Guardar las recetas en el estado
         } else {
@@ -25,6 +27,7 @@ const VerRecetas = () => {
   }, []); // El array vacío significa que se ejecuta una vez al montar el componente
 
   return (
+
     <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
       {recetas.map((receta) => (
         <div key={receta.id} className="card">

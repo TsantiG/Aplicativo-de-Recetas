@@ -10,7 +10,10 @@ const app = express();
     // Inicializar la base de datos
     await initializeDB();
     // Middlewares
-    app.use(cors());
+    app.use(cors({
+        origin: 'http://localhost:4321', // Permitir las solicitudes desde el frontend
+        credentials: true
+    }));
     app.use(helmet());
     app.use(morgan('dev'));
     app.use(express.json());
