@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios';  // Importamos Axios
 
 const InicioSesion = () => {
   const [correo, setCorreo] = useState('');
@@ -9,26 +10,18 @@ const InicioSesion = () => {
     e.preventDefault();  // Evitar que el formulario recargue la página
 
     try {
-      const response = await fetch('http://localhost:3000/api/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          correo,  // Enviamos el correo ingresado
-          password,  // Enviamos la contraseña ingresada
-        }),
+      const response = await axios.post('http://localhost:3000/api/login', {
+        correo,  // Enviamos el correo ingresado
+        password,  // Enviamos la contraseña ingresada
       });
 
-      const data = await response.json();
-
-      if (response.ok) {
+      if (response.status === 200) {
         // Guardar el token JWT en localStorage
-        localStorage.setItem('token', data.token);
+        localStorage.setItem('token', response.data.token);
         alert('Inicio de sesión exitoso');
-        navigate('/index');
+        window.location.href = '/inicio';  // Redirigir al usuario al inicio
       } else {
-        setError(data.message || 'Error al iniciar sesión');
+        setError(response.data.message || 'Error al iniciar sesión');
       }
     } catch (error) {
       console.error('Error al conectar con la API:', error);

@@ -7,7 +7,9 @@ const recetasController = new RecetasController();
 
 // Crear una nueva receta
 router.post('/create', authMiddleware, async (req, res) => {
-  const receta = req.body;
+  const id_usuario = (req as any).userId;
+  const receta = { ...req.body, id_usuario }; // Asociar la receta con el usuario autenticado
+  
 
   try {
     const recetaId = await recetasController.createReceta(receta);
@@ -55,6 +57,33 @@ router.get('/:id',authMiddleware, async (req, res) => {
       }
   }
 });
+
+// Obtener todas las recetas por ID dce usuario
+router.get('/usuario/recetas', authMiddleware, async (req, res) => {
+
+  const userId = (req as any).userId; 
+  
+  if (!userId || isNaN(userId)) {
+    return res.status(400).json({ message: 'El ID de usuario es inválido o no está autenticado' });
+  }
+
+  try {
+    const recetas = await recetasController.getRecetasByUsuario(userId);
+    if (recetas.length === 0) {
+      return res.status(404).json({ message: 'No se encontraron recetas para este usuario.' });
+    }
+    res.json(recetas);
+  } catch (err) {
+    if (err instanceof Error) {
+        console.error("Error al buscar la receta por id:", err); 
+        res.status(500).json({ message: 'Error al buscar la receta por id', error: err.message });
+      } else {
+        console.error("Error desconocido:", err);
+        res.status(500).json({ message: 'Error desconocido al buscar la receta por id' });
+      }
+  }
+});
+
 
 // Actualizar una receta
 router.put('/:id', authMiddleware, async (req, res) => {

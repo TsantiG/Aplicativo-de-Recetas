@@ -2,6 +2,14 @@
 import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header'
 import Footer from '../components/Footer';
+
+// Proteger esta página verificando si el usuario tiene un token en localStorage
+if (typeof window !== 'undefined') {
+  const token = localStorage.getItem('token');
+  if (!token) {
+    window.location.href = '/login';  // Redirigir al login si no hay token
+  }
+}
 ---
 
 <Layout title="Guarda y Comparte tus Recetas.">

@@ -5,7 +5,8 @@ const router = express.Router();
 const recetasController = new RecetasController();
 // Crear una nueva receta
 router.post('/create', authMiddleware, async (req, res) => {
-    const receta = req.body;
+    const id_usuario = req.userId;
+    const receta = { ...req.body, id_usuario }; // Asociar la receta con el usuario autenticado
     try {
         const recetaId = await recetasController.createReceta(receta);
         res.status(201).json({ message: 'Receta creada con éxito', recetaId });
@@ -44,6 +45,31 @@ router.get('/:id', authMiddleware, async (req, res) => {
     try {
         const receta = await recetasController.getRecetaById(Number(id));
         res.json(receta);
+    }
+    catch (err) {
+        if (err instanceof Error) {
+            console.error("Error al buscar la receta por id:", err);
+            res.status(500).json({ message: 'Error al buscar la receta por id', error: err.message });
+        }
+        else {
+            console.error("Error desconocido:", err);
+            res.status(500).json({ message: 'Error desconocido al buscar la receta por id' });
+        }
+    }
+});
+// Obtener todas las recetas por ID dce usuario
+router.get('/usuario/recetas', authMiddleware, async (req, res) => {
+    // Asegúrate de que el userId esté definido y sea un número válido
+    const userId = req.userId; // El userId debe venir del token JWT
+    if (!userId || isNaN(userId)) {
+        return res.status(400).json({ message: 'El ID de usuario es inválido o no está autenticado' });
+    }
+    try {
+        const recetas = await recetasController.getRecetasByUsuario(userId);
+        if (recetas.length === 0) {
+            return res.status(404).json({ message: 'No se encontraron recetas para este usuario.' });
+        }
+        res.json(recetas);
     }
     catch (err) {
         if (err instanceof Error) {

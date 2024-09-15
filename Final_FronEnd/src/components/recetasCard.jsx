@@ -8,7 +8,7 @@ const VerRecetas = () => {
   useEffect(() => {
     const fetchRecetas = async () => {
       try {
-        const response = await fetch('http://localhost:3000/api/recetas'); // Asegúrate de que la URL de tu API esté bien configurada
+        const response = await fetch('http://localhost:3000/api/recetas/all'); // Asegúrate de que la URL de tu API esté bien configurada
         const data = await response.json();
 
         console.log('se conento o no?');

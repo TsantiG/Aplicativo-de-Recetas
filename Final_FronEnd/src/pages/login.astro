@@ -1,12 +1,13 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import InicioSesion from '../components/loginCard'
+import InicioSesion from '../components/loginCard.jsx'
 ---
 
 <Layout title="Guarda y Comparte tus Recetas.">
     <main class="flex-grow pt-20">
-        <InicioSesion />
+        <InicioSesion client:load />
     </main>
     
 </Layout>
 
+ 

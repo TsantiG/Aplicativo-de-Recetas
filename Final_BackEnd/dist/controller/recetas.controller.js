@@ -66,6 +66,21 @@ class RecetasController {
             throw err;
         }
     }
+    // Obtener todas las recetas de un usuario específico
+    async getRecetasByUsuario(id_usuario) {
+        const sql = `
+    SELECT * FROM recetas 
+    WHERE id_usuario = ?
+  `;
+        try {
+            const [rows] = await this.pool.query(sql, [id_usuario]);
+            return rows;
+        }
+        catch (err) {
+            console.error("Error al obtener las recetas del usuario:", err);
+            throw err;
+        }
+    }
     // Eliminar una receta por ID
     async deleteReceta(id) {
         const sql = "DELETE FROM recetas WHERE id = ?";

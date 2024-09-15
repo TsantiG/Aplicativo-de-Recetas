@@ -3,6 +3,13 @@ import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header'
 import Footer from '../components/Footer';
 const imgUrl='https://res.cloudinary.com/dstpvt64c/image/upload/v1726074707/logo_1_qereih.png';
+// Proteger esta página verificando si el usuario tiene un token en localStorage
+if (typeof window !== 'undefined') {
+  const token = localStorage.getItem('token');
+  if (!token) {
+    window.location.href = '/login';  // Redirigir al login si no hay token
+  }
+}
 ---
 
 <Layout title="Guarda y Comparte tus Recetas.">
