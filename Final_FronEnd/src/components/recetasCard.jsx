@@ -1,48 +1,63 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
 const VerRecetas = () => {
-  // Estado para almacenar las recetas
-  const [recetas, setRecetas] = useState([]);
+  const [recetas, setRecetas] = useState([]);  // Estado para almacenar las recetas del usuario
+  const [error, setError] = useState(null);    // Estado para manejar errores
+  const [loading, setLoading] = useState(true);  // Estado para manejar el loading
 
-  // Conexión a la API para obtener las recetas cuando el componente se monta
   useEffect(() => {
-    const fetchRecetas = async () => {
+    // Función para obtener las recetas del usuario autenticado
+    const fetchRecetasUsuario = async () => {
       try {
-        const response = await fetch('http://localhost:3000/api/recetas/all'); // Asegúrate de que la URL de tu API esté bien configurada
-        const data = await response.json();
-
-        console.log('se conento o no?');
-
-        if (response.ok) {
-          setRecetas(data); // Guardar las recetas en el estado
-        } else {
-          console.error('Error al obtener recetas:', data.message);
-        }
+        const token = localStorage.getItem('token');  // Obtener el token JWT desde localStorage
+        const response = await axios.get('http://localhost:3000/api/recetas/usuario/recetas', {
+          headers: {
+            'Authorization': `Bearer ${token}`,  // Enviar el token en el header
+          },
+        });
+        setRecetas(response.data);  // Guardar las recetas en el estado
       } catch (error) {
-        console.error('Error al conectar con la API:', error);
+        console.error('Error al obtener las recetas del usuario:', error);
+        setError('Error al obtener las recetas');
+      } finally {
+        setLoading(false);
       }
     };
 
-    fetchRecetas(); // Llamar a la función para obtener las recetas
-  }, []); // El array vacío significa que se ejecuta una vez al montar el componente
+    fetchRecetasUsuario();
+  }, []);  // Solo se ejecuta una vez cuando el componente se monta
+
+  if (loading) {
+    return <p>Cargando recetas...</p>;
+  }
+
+  if (error) {
+    return <p className="text-red-500">{error}</p>;
+  }
+
+  if (recetas.length === 0) {
+    return <p>No has creado recetas aún.</p>;
+  }
 
   return (
-
-    <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    <main className="flex flex-wrap justify-center gap-6 py-10 px-4">
       {recetas.map((receta) => (
-        <div key={receta.id} className="card">
-          <img src={receta.imagen_url} alt={receta.nombre} className="w-full h-64 object-cover" />
+        <div key={receta.id} className="w-full max-w-sm bg-white border rounded-md shadow-md p-4">
+          <img
+            src={receta.imagen_url}
+            alt={receta.nombre}
+            className="h-40 w-full object-cover rounded-t-md"
+          />
           <div className="p-4">
-            <h3 className="text-xl font-bold">{receta.nombre}</h3>
-            <p>{receta.descripcion}</p>
-            <div className="mt-4">
-              <button className="btn btn-edit">Editar</button>
-              <button className="btn btn-delete">Borrar</button>
-            </div>
+            <h2 className="text-2xl font-bold text-gray-900">{receta.nombre}</h2>
+            <p className="text-gray-600">{receta.descripcion}</p>
+            <p className="text-rosa font-bold">Ingredientes: {receta.ingredientes}</p>
+            <p className="text-gray-700 mt-2">Instrucciones: {receta.instrucciones}</p>
           </div>
         </div>
       ))}
-    </section>
+    </main>
   );
 };
 

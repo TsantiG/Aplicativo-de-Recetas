@@ -61,16 +61,26 @@ class QueryAsync {
   }
 
   // Actualizar usuario (si es necesario modificar nombre o contraseña)
-  async updateUser(userid: number, user: { nombre: string; password_hash: string }): Promise<number> {
-    const sql = "UPDATE usuarios SET nombre = ?, password_hash = ? WHERE id = ?";
+  async updateUser(userid: number, user: { nombre: string; correo: string; password_hash?: string }): Promise<number> {
+    const sql = `
+      UPDATE usuarios 
+      SET nombre = ?, correo = ?, password_hash = COALESCE(?, password_hash) 
+      WHERE id = ?
+    `;
     try {
-      const [result] = await this.database.query<ResultSetHeader>(sql, [user.nombre, user.password_hash, userid]);
-      return result.affectedRows;  // Retorna la cantidad de filas afectadas
+      const [result] = await this.database.query<ResultSetHeader>(sql, [
+        user.nombre, 
+        user.correo, 
+        user.password_hash || null,  // Actualizar la contraseña solo si se proporciona
+        userid
+      ]);
+      return result.affectedRows;
     } catch (err) {
-      console.error("Error updating user: ", err);
+      console.error("Error updating user:", err);
       throw err;
     }
   }
+  
 
   // Eliminar usuario
   async deleteUser(userid: number): Promise<number> {

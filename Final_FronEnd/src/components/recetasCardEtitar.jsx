@@ -1,6 +1,6 @@
 import React from 'react';
 
-const EditarUsuario = () => {
+const EditarRecetas = () => {
     const imgUrl='https://res.cloudinary.com/dstpvt64c/image/upload/v1726074707/logo_1_qereih.png';
     return (
     <section>
@@ -21,4 +21,4 @@ const EditarUsuario = () => {
 };
 
 
-export default EditarUsuario;
+export default EditarRecetas;

@@ -4,8 +4,12 @@ import QueryAsync from '../controller/login.controller.js';
 import { getPool } from '../config/db.js'; // Obtener el pool inicializado
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import multer from 'multer';
+import PerfilController from '../controller/perfil.controller.js';
 const router = Router();
 const query = new QueryAsync(getPool()); // Pasar el pool inicializado al controlador
+const perfilController = new PerfilController();
+const upload = multer({ dest: 'uploads/' }); // Carpeta temporal para almacenar las imágenes
 // Configuración de la sesión
 router.use(session({
     secret: process.env.JWT_SECRET || 'mySecretKey',
@@ -70,9 +74,52 @@ router.post('/login', async (req, res) => {
     }
 });
 router.get('/perfil', authMiddleware, async (req, res) => {
-    const userId = req.session.userId;
-    const user = await query.getUserById(userId);
-    res.json(user);
+    const userId = req.userId; // Obtener userId desde el token JWT
+    if (!userId) {
+        return res.status(401).json({ message: 'No autorizado. ID de usuario no encontrado.' });
+    }
+    try {
+        const user = await query.getUserById(userId);
+        if (!user) {
+            return res.status(404).json({ message: 'Usuario no encontrado.' });
+        }
+        res.json(user);
+    }
+    catch (err) {
+        if (err instanceof Error) {
+            console.error("Error al obtener el perfil del usuario:", err);
+            res.status(500).json({ message: 'Error al obtener el perfil del usuario', error: err.message });
+        }
+        else {
+            console.error("Error desconocido:", err);
+            res.status(500).json({ message: 'Error desconocido al obtener el perfil del usuario' });
+        }
+    }
+});
+router.put('/update', authMiddleware, upload.single('foto'), async (req, res) => {
+    const userId = req.userId;
+    const { nombre, correo, password } = req.body;
+    try {
+        // Si se proporciona una nueva contraseña, la hasheamos; de lo contrario, dejamos password_hash como undefined
+        const password_hash = password ? await bcrypt.hash(password, 10) : undefined;
+        const user = { nombre, correo, password_hash }; // Asignamos undefined si no hay password
+        await query.updateUser(userId, user);
+        // Actualizar la foto de perfil si se proporciona
+        if (req.file) {
+            await perfilController.actualizarFotoPerfil(userId, req.file);
+        }
+        res.status(200).json({ message: 'Perfil actualizado con éxito' });
+    }
+    catch (err) {
+        if (err instanceof Error) {
+            console.error("Error Actualizando usuario:", err);
+            res.status(500).json({ message: 'Error al Actualizar usuario', error: err.message });
+        }
+        else {
+            console.error("Error desconocido:", err);
+            res.status(500).json({ message: 'Error desconocido al Actualizar usuario' });
+        }
+    }
 });
 // router.post('/register', async (req, res) => {
 //   const { nombre, correo, password } = req.body;
