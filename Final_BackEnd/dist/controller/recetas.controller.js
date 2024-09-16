@@ -7,18 +7,24 @@ class RecetasController {
     // Crear una nueva receta
     async createReceta(receta) {
         const sql = `
-      INSERT INTO recetas (nombre, descripcion, instrucciones, ingredientes, imagen_url, video_url, id_usuario)
-      VALUES (?, ?, ?, ?, ?, ?, ?)
-    `;
+        INSERT INTO recetas (nombre, descripcion, ingredientes, instrucciones, imagen_url, video_url, id_usuario)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
+      `;
         try {
-            const [result] = await this.pool.query(sql, [
-                receta.nombre, receta.descripcion, receta.instrucciones, receta.ingredientes, receta.imagen_url, receta.video_url, receta.id_usuario
+            const [result] = await this.pool.execute(sql, [
+                receta.nombre,
+                receta.descripcion,
+                receta.ingredientes,
+                receta.instrucciones,
+                receta.imagen_url,
+                receta.video_url,
+                receta.id_usuario
             ]);
-            return result.insertId; // Retorna el ID de la receta recién creada
+            return result;
         }
         catch (err) {
-            console.error("Error al crear la receta:", err);
-            throw err;
+            console.error('Error al crear la receta:', err);
+            throw err; // Lanzar el error para que sea capturado en la ruta
         }
     }
     // Obtener todas las recetas

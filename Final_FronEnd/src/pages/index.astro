@@ -1,12 +1,13 @@
 ---
 
+import PageInicio from '../components/inicioCard';
 import Layout from '../layouts/Layout.astro';
 ---
 
 <Layout title="Guarda y Comparte tus Recetas.">
 	
 	<main class="flex-grow pt-20">
-		<!-- Tu contenido aquí -->
+		<PageInicio  client:load />
 	</main>
 	
 </Layout>

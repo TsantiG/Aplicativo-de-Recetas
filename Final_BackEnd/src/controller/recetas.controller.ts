@@ -1,7 +1,7 @@
 import { Pool, ResultSetHeader } from 'mysql2/promise';
 import { getPool } from '../config/db.js';  // Asegúrate de que getPool esté correctamente configurado
 import { Receta }  from '../interfaces/recetas.interface.js';
-
+ 
 
 class RecetasController {
   private pool: Pool;
@@ -11,22 +11,39 @@ class RecetasController {
   }
 
   // Crear una nueva receta
-  async createReceta(receta: { nombre: string, descripcion: string, instrucciones: string, ingredientes: string, imagen_url: string, video_url: string, id_usuario: number }) {
-    const sql = `
-      INSERT INTO recetas (nombre, descripcion, instrucciones, ingredientes, imagen_url, video_url, id_usuario)
-      VALUES (?, ?, ?, ?, ?, ?, ?)
-    `;
-    try {
-      const [result] = await this.pool.query<ResultSetHeader>(sql, [
-        receta.nombre, receta.descripcion, receta.instrucciones, receta.ingredientes, receta.imagen_url, receta.video_url, receta.id_usuario
-      ]);
-      return result.insertId;  // Retorna el ID de la receta recién creada
-    } catch (err) {
-      console.error("Error al crear la receta:", err);
-      throw err;
+    async createReceta(receta: {
+      nombre: string,
+      descripcion: string,
+      ingredientes: string,
+      instrucciones: string,
+      imagen_url: string,
+      video_url: string,
+      id_usuario: number
+    }) {
+      const sql = `
+        INSERT INTO recetas (nombre, descripcion, ingredientes, instrucciones, imagen_url, video_url, id_usuario)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
+      `;
+  
+      try {
+        const [result] = await this.pool.execute(sql, [
+          receta.nombre,
+          receta.descripcion,
+          receta.ingredientes,
+          receta.instrucciones,
+          receta.imagen_url,
+          receta.video_url,
+          receta.id_usuario
+        ]);
+        return result;
+      } catch (err) {
+        console.error('Error al crear la receta:', err);
+        throw err;  // Lanzar el error para que sea capturado en la ruta
+      }
     }
-  }
-
+  
+  
+  
   // Obtener todas las recetas
   async getAllRecetas() {
     const sql = "SELECT * FROM recetas";

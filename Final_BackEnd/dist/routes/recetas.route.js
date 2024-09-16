@@ -1,13 +1,33 @@
 import express from 'express';
 import RecetasController from '../controller/recetas.controller.js';
 import authMiddleware from '../middleware/authMiddleware.js';
+import cloudinary from '../config/cloudinaryConfig.js';
+import multer from 'multer';
+const upload = multer({ dest: 'uploads/' }); // Carpeta temporal para almacenar las imágenes
 const router = express.Router();
 const recetasController = new RecetasController();
 // Crear una nueva receta
-router.post('/create', authMiddleware, async (req, res) => {
+router.post('/create', authMiddleware, upload.single('imagen'), async (req, res) => {
     const id_usuario = req.userId;
-    const receta = { ...req.body, id_usuario }; // Asociar la receta con el usuario autenticado
+    const { nombre, descripcion, ingredientes, instrucciones } = req.body;
+    let imagen_url = '';
     try {
+        // Subir imagen a Cloudinary
+        if (req.file) {
+            const result = await cloudinary.uploader.upload(req.file.path, {
+                folder: 'recetas',
+            });
+            imagen_url = result.secure_url;
+        }
+        const receta = {
+            nombre,
+            descripcion,
+            ingredientes,
+            instrucciones,
+            imagen_url, // URL de la imagen subida
+            video_url: '', // Por el momento no hay video
+            id_usuario,
+        };
         const recetaId = await recetasController.createReceta(receta);
         res.status(201).json({ message: 'Receta creada con éxito', recetaId });
     }
@@ -59,8 +79,7 @@ router.get('/:id', authMiddleware, async (req, res) => {
 });
 // Obtener todas las recetas por ID dce usuario
 router.get('/usuario/recetas', authMiddleware, async (req, res) => {
-    // Asegúrate de que el userId esté definido y sea un número válido
-    const userId = req.userId; // El userId debe venir del token JWT
+    const userId = req.userId;
     if (!userId || isNaN(userId)) {
         return res.status(400).json({ message: 'El ID de usuario es inválido o no está autenticado' });
     }
