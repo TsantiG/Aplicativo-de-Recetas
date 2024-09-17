@@ -27,8 +27,6 @@ const VerCompartidas = () => {
           },
         });
 
-        // Verificar si los campos 'region_receta' y 'tipo_receta' están presentes en los datos recibidos
-        console.log(response.data); // Verificar qué datos se están recibiendo
         setRecetas(response.data);
       } catch (error) {
         console.error('Error al obtener las recetas compartidas:', error);
@@ -40,6 +38,29 @@ const VerCompartidas = () => {
 
     fetchRecetasCompartidas();
   }, [navigate]);
+
+  // Función para eliminar una receta compartida
+  const handleDeleteCompartida = async (recetaId) => {
+    const token = localStorage.getItem('token');
+    const confirmDelete = window.confirm('¿Estás seguro de que quieres dejar de compartir esta receta?');
+    
+    if (confirmDelete) {
+      try {
+        await axios.delete(`http://localhost:3000/api/compartir/${recetaId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        // Eliminar la receta de la lista localmente
+        setRecetas(recetas.filter((receta) => receta.id !== recetaId));
+        alert('Receta compartida eliminada con éxito');
+      } catch (error) {
+        console.error('Error al eliminar la receta compartida:', error);
+        setError('Error al eliminar la receta compartida');
+      }
+    }
+  };
 
   // Redirigir al formulario para compartir una receta
   const handleNuevaReceta = () => {
@@ -55,11 +76,11 @@ const VerCompartidas = () => {
   }
 
   return (
-    <main className="flex flex-col items-center py-10 px-4">
+    <main className="flex flex-col items-center py-10 px-4 h-screen">
       {/* Botón para agregar una nueva receta compartida */}
       <button
         onClick={handleNuevaReceta}
-        className="mb-6 bg-blue-500 text-white py-2 px-4 rounded"
+        className="mb-6 bg-blue-500 text-white mt-20 py-2 px-4 rounded"
       >
         Compartir Nueva Receta
       </button>
@@ -81,6 +102,14 @@ const VerCompartidas = () => {
                 {/* Mostrar la región y el tipo, si están disponibles */}
                 <p className="text-rosa font-bold">Región: {receta.region_receta || 'N/A'}</p>
                 <p className="text-rosa font-bold">Tipo: {receta.tipo_receta || 'N/A'}</p>
+
+                {/* Botón para eliminar la receta compartida */}
+                <button
+                  onClick={() => handleDeleteCompartida(receta.id)}
+                  className="mt-4 bg-red-500 text-white py-1 px-4 rounded"
+                >
+                  Eliminar
+                </button>
               </div>
             </div>
           ))

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';  // Importa el hook useNavigate
 
 const PerfilCard = () => {
   const [nombre, setNombre] = useState('');
@@ -9,10 +10,14 @@ const PerfilCard = () => {
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(null);
 
+  const navigate = useNavigate();  // Hook para redireccionar
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     const formData = new FormData();
+    const userId = localStorage.getItem('userId');  // Obtener el ID del usuario desde localStorage
+    formData.append('userId', userId);
     formData.append('nombre', nombre);
     formData.append('correo', correo);
     if (password) {
@@ -21,16 +26,14 @@ const PerfilCard = () => {
     if (foto) {
       formData.append('foto', foto);
     }
-  
+
     try {
-      const token = localStorage.getItem('token');  // Asegúrate de que el token se obtiene correctamente
       const response = await axios.put('http://localhost:3000/api/update', formData, {
         headers: {
-          'Authorization': `Bearer ${token}`,  // Asegúrate de que el token JWT se envía aquí
           'Content-Type': 'multipart/form-data',
         },
       });
-  
+
       if (response.status === 200) {
         setSuccess(true);
         alert('Perfil actualizado con éxito');
@@ -40,7 +43,11 @@ const PerfilCard = () => {
       console.error('Error al actualizar el perfil:', error);
     }
   };
-  
+
+  // Función para redireccionar a la página de Bienvenida
+  const handleBackToWelcome = () => {
+    navigate('/bienvenida');
+  };
 
   return (
     <div className="max-w-md mx-auto p-6 bg-white rounded-md shadow-md">
@@ -90,6 +97,14 @@ const PerfilCard = () => {
           Actualizar Perfil
         </button>
       </form>
+
+      {/* Botón para volver a la página de bienvenida */}
+      <button
+        onClick={handleBackToWelcome}
+        className="mt-4 w-full bg-gray-500 text-white p-2 rounded"
+      >
+        Volver a Bienvenida
+      </button>
     </div>
   );
 };

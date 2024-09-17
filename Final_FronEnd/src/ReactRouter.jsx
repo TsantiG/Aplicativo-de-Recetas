@@ -12,6 +12,7 @@ import EditarRecetas from './components/recetasCardEtitar.jsx';
 import VerCompartidas from './components/compartir.jsx';
 import Bienvenida from './components/bienvenida.jsx';
 import FormularioCompartirReceta from './components/FormularioCompartirReceta.jsx';
+import Social from './components/social.jsx';
 
 // import VerCompartidas from './components/VerCompartidas';
 // import Social from './components/Social';
@@ -25,7 +26,6 @@ const ReactRouter = () => {
         <Route path="/login" element={<InicioSesion />} />
         <Route path="/register" element={<RegistrarUsuario />} />
         <Route path="/editarUsuario" element={<PerfilCard />} />
-        <Route path="/compartir/nueva" element={<FormularioCompartirReceta />} />
 
 
 
@@ -69,6 +69,22 @@ const ReactRouter = () => {
             element={
               <ProtectedRoute>
                 <Bienvenida />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/social"
+            element={
+              <ProtectedRoute>
+                <Social />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/compartir/nueva"
+            element={
+              <ProtectedRoute>
+                <FormularioCompartirReceta />
               </ProtectedRoute>
             }
           />

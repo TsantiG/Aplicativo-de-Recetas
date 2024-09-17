@@ -49,7 +49,8 @@ const CrearRecetasCard = () => {
   };
 
   return (
-    <section className="max-w-md mx-auto p-6 bg-white rounded-md shadow-md">
+    <div className='mt-16 h-screen'>
+    <section className="max-w-md mx-auto p-6 bg-white rounded-md shadow-md ">
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
           <label className="block text-gray-700">Nombre de la Receta:</label>
@@ -103,7 +104,7 @@ const CrearRecetasCard = () => {
           Crear Receta
         </button>
       </form>
-    </section>
+    </section></div>
   );
 };
 

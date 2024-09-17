@@ -31,8 +31,21 @@ import ReactRouter from '../ReactRouter.jsx'
     );
   }
 
-  html {
-    font-family: 'Marck Script', cursive;
-    background: #ffffff;
-  }
+  html, body {
+  height: 100%;
+  margin: 0;
+  font-family: 'Marck Script', cursive;
+  background: #ffffff;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+main {
+  flex: 1;  /* El contenido principal tomará el espacio restante */
+}
+
 </style>

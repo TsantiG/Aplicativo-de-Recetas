@@ -73,13 +73,13 @@ router.post('/login', async (req, res) => {
         }
     }
 });
-router.get('/perfil', authMiddleware, async (req, res) => {
-    const userId = req.userId; // Obtener userId desde el token JWT
+router.get('/perfil', async (req, res) => {
+    const { userId } = req.query; // Obtener el ID del usuario desde la consulta (query params)
     if (!userId) {
-        return res.status(401).json({ message: 'No autorizado. ID de usuario no encontrado.' });
+        return res.status(400).json({ message: 'ID de usuario no proporcionado.' });
     }
     try {
-        const user = await query.getUserById(userId);
+        const user = await query.getUserById(Number(userId)); // Convertimos a número
         if (!user) {
             return res.status(404).json({ message: 'Usuario no encontrado.' });
         }
@@ -96,9 +96,8 @@ router.get('/perfil', authMiddleware, async (req, res) => {
         }
     }
 });
-router.put('/update', authMiddleware, upload.single('foto'), async (req, res) => {
-    const userId = req.userId;
-    const { nombre, correo, password } = req.body;
+router.put('/update', upload.single('foto'), async (req, res) => {
+    const { userId, nombre, correo, password } = req.body; // Recibimos el id del usuario desde el body
     try {
         // Si se proporciona una nueva contraseña, la hasheamos; de lo contrario, dejamos password_hash como undefined
         const password_hash = password ? await bcrypt.hash(password, 10) : undefined;

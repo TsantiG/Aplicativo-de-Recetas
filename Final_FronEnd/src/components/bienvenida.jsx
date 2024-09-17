@@ -1,12 +1,11 @@
-import React, { useState } from 'react';
-
+import React from 'react';
 
 const Bienvenida = () => {
-    return(
-        <h1 className='mt-11 mb-11 justify-center'>Bienvenido a la pagina</h1>
-    )
-}
-
-
+    return (
+        <div className="flex items-center justify-center h-screen">
+            <h1 className="text-8xl mt-20 mb-20 text-center">Bienvenido a la página</h1>
+        </div>
+    );
+};
 
 export default Bienvenida;

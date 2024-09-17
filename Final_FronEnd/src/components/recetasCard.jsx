@@ -18,7 +18,7 @@ const VerRecetas = () => {
             'Authorization': `Bearer ${token}`,  // Enviar el token en el header
           },
         });
-        setRecetas(response.data);  // Guardar las recetas en el estado
+        setRecetas(response.data || []);  // Guardar las recetas en el estado, asegurando que siempre sea un array
       } catch (error) {
         console.error('Error al obtener las recetas del usuario:', error);
         setError('Error al obtener las recetas');
@@ -66,24 +66,22 @@ const VerRecetas = () => {
     return <p>Cargando recetas...</p>;
   }
 
-  if (error) {
-    return <p className="text-red-500">{error}</p>;
-  }
-
   return (
-    <div>
-      {/* Botón para crear una nueva receta */}
-      <div className="flex justify-center my-4 mt-10">
+    <div className='h-screen'>
+      <div className="flex justify-center my-4 mt-10 ">
         <button
           onClick={handleCreateReceta}
-          className="bg-green-500 text-white py-2 px-6 rounded-lg"
+          className="bg-green-500 text-white mt-20 py-2 px-6 rounded-lg"
         >
           Crear Nueva Receta
         </button>
       </div>
 
+      {/* Mostrar recetas o mensaje si no hay recetas */}
       <main className="flex flex-wrap justify-center gap-6 py-10 px-4">
-        {recetas.length === 0 ? (
+        {error ? (
+          <p className="text-red-500">{error}</p>
+        ) : recetas.length === 0 ? (
           <p>No has creado recetas aún.</p>
         ) : (
           recetas.map((receta) => (

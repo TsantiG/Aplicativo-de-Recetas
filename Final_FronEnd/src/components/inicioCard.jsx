@@ -33,25 +33,25 @@ const PageInicio = () => {
 
   return (
     <main className="flex flex-col items-center py-10 px-4">
-      {/* Contenedor del logo y botón de login */}
+      
       <div className="w-full flex justify-between items-center mb-6">
-        {/* Logo de la página */}
+        
         <img
-          src="https://res.cloudinary.com/dstpvt64c/image/upload/v1726074707/logo_1_qereih.png"  // Reemplaza con la URL de tu logo
+          src="https://res.cloudinary.com/dstpvt64c/image/upload/v1726074707/logo_1_qereih.png" 
           alt="Logo de la página"
-          className="h-12 w-auto"  // Tamaño del logo
+          className="w-20 h-auto" 
         />
-
-        {/* Botón para redirigir al login */}
+{/* */} 
+        
         <button
           onClick={handleLoginRedirect}
-          className="bg-rosa text-white font-bold py-2 px-4 rounded"
+          className="bg-rosa text-black font-bold py-2 px-4 rounded border-black border-2"
         >
           Iniciar Sesión
         </button>
       </div>
 
-      {/* Mostrar recetas compartidas */}
+      
       <div className="flex flex-wrap justify-center gap-6">
         {recetas.length === 0 ? (
           <p>No hay recetas compartidas por el momento.</p>

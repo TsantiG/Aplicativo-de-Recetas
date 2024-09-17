@@ -36,17 +36,24 @@ class QueryAsync {
     }
   }
 
-  // Obtener usuario por ID (para perfil o uso interno)
-  async getUserById(userid: number): Promise<Usuario | null> {
-    const sql = "SELECT * FROM usuarios WHERE id = ?";
-    try {
-      const [rows] = await this.database.query<Usuario[]>(sql, [userid]);
-      return rows[0] || null;
-    } catch (err) {
-      console.error("Error getting user by id: ", err);
-      throw err;
-    }
+// Obtener usuario por ID junto con su foto de perfil
+async getUserById(userid: number): Promise<Usuario | null> {
+  const sql = `
+    SELECT u.*, uf.url_foto 
+    FROM usuarios u
+    LEFT JOIN usuarios_fotos uf ON u.id = uf.id_usuario
+    WHERE u.id = ?
+  `;
+
+  try {
+    const [rows] = await this.database.query<Usuario[]>(sql, [userid]);
+    return rows[0] || null;
+  } catch (err) {
+    console.error("Error getting user by id: ", err);
+    throw err;
   }
+}
+
 
   // Crear usuario (para registro)
   async createUser(user: { nombre: string; correo: string; password_hash: string }): Promise<number> {

@@ -73,6 +73,7 @@ const EditarRecetas = () => {
   }
 
   return (
+    <div className='mt-16 h-screen'>
     <section className="max-w-md mx-auto p-6 bg-white rounded-md shadow-md">
       <h2 className="text-2xl font-bold text-center mb-6">Editar Receta</h2>
 
@@ -156,7 +157,7 @@ const EditarRecetas = () => {
           </button>
         </div>
       </form>
-    </section>
+    </section></div>
   );
 };
 

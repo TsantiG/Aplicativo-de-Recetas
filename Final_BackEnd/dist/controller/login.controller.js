@@ -28,9 +28,14 @@ class QueryAsync {
             throw err;
         }
     }
-    // Obtener usuario por ID (para perfil o uso interno)
+    // Obtener usuario por ID junto con su foto de perfil
     async getUserById(userid) {
-        const sql = "SELECT * FROM usuarios WHERE id = ?";
+        const sql = `
+    SELECT u.*, uf.url_foto 
+    FROM usuarios u
+    LEFT JOIN usuarios_fotos uf ON u.id = uf.id_usuario
+    WHERE u.id = ?
+  `;
         try {
             const [rows] = await this.database.query(sql, [userid]);
             return rows[0] || null;
