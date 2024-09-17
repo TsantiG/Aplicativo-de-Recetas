@@ -54,22 +54,29 @@ JOIN regiones rg ON cr.id_region = rg.id;
     }
   }
 
-  // Obtener las recetas compartidas por un usuario
-  async getCompartidasByUsuario(id_usuario: number) {
-    const sql = `
-      SELECT cr.*, r.nombre as receta_nombre 
-      FROM compartirRecetas cr
-      JOIN recetas r ON cr.id_receta = r.id
-      WHERE cr.id_usuario = ?
-    `;
-    try {
-      const [rows] = await this.pool.query(sql, [id_usuario]);
-      return rows;
-    } catch (err) {
-      console.error("Error al obtener las recetas compartidas por el usuario:", err);
-      throw err;
-    }
+// Obtener las recetas compartidas por un usuario
+async getCompartidasByUsuario(id_usuario: number) {
+  const sql = `
+    SELECT cr.*, 
+           r.nombre AS receta_nombre, 
+           r.imagen_url,
+           t.tipo AS tipo_receta, 
+           rg.region AS region_receta 
+    FROM compartirRecetas cr
+    JOIN recetas r ON cr.id_receta = r.id
+    JOIN tipos t ON cr.id_tipo = t.id
+    JOIN regiones rg ON cr.id_region = rg.id
+    WHERE cr.id_usuario = ?
+  `;
+  try {
+    const [rows] = await this.pool.query(sql, [id_usuario]);
+    return rows;
+  } catch (err) {
+    console.error("Error al obtener las recetas compartidas por el usuario:", err);
+    throw err;
   }
+}
+
 
   async getCompartidasById(id: number):Promise<Compartir | null>{
     const sql = "SELECT * FROM compartirRecetas WHERE id = ?";

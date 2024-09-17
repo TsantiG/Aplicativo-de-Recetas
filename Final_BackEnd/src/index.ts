@@ -33,6 +33,8 @@ const app = express();
   app.use('/api/comentar', comentar.default)
   const calificar = await import('./routes/calificar.route.js')
   app.use('/api/calificar', calificar.default)
+  const Regiones_Tipos = await import('./routes/regiones_Tipos.route.js')
+  app.use('/api/categorias', Regiones_Tipos.default)
 
  
   const PORT = process.env.PORT || 3000;

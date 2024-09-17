@@ -1,6 +1,6 @@
 ---
 // Este archivo será la base de toda la aplicación
-import ReactRouter from '../components/ReactRouter.jsx';
+import ReactRouter from '../ReactRouter.jsx'
 ---
 
 <!doctype html>
@@ -14,7 +14,7 @@ import ReactRouter from '../components/ReactRouter.jsx';
     <title>Recetas App</title>
   </head>
   <body>
-    <ReactRouter client:load />  <!-- Aquí cargamos React Router para gestionar las rutas -->
+    <ReactRouter client:only="react" />  <!-- Aquí cargamos React Router para gestionar las rutas -->
   </body>
 </html>
 

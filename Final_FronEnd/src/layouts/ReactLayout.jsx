@@ -7,7 +7,7 @@ const ReactLayout = () => {
   return (
     <>
       <Header />
-      <main>
+      <main class="flex-grow pt-20">
         <Outlet />  {/* Aquí se cargan las vistas de las rutas */}
       </main>
       <Footer />

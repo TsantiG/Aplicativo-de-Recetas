@@ -5,19 +5,25 @@ const router = express.Router();
 const compartirController = new CompartirRecetasController();
 // Compartir una receta
 router.post('/compartir', authMiddleware, async (req, res) => {
-    const { id_usuario, id_receta, id_region, id_tipo } = req.body;
+    const id_usuario = req.userId; // El ID de usuario autenticado debería estar disponible aquí
+    const { id_receta, id_region, id_tipo } = req.body;
     try {
-        const compartirId = await compartirController.compartirReceta({ id_usuario, id_receta, id_region, id_tipo });
+        const compartirId = await compartirController.compartirReceta({
+            id_usuario, // Asegúrate de pasar el ID del usuario autenticado
+            id_receta,
+            id_region,
+            id_tipo
+        });
         res.status(201).json({ message: 'Receta compartida con éxito', compartirId });
     }
     catch (err) {
         if (err instanceof Error) {
             console.error("Error al compartir receta:", err);
-            res.status(500).json({ message: 'Error  al compartir receta', error: err.message });
+            res.status(500).json({ message: 'Error al compartir receta', error: err.message });
         }
         else {
             console.error("Error desconocido:", err);
-            res.status(500).json({ message: 'Error desconocido  al compartir receta' });
+            res.status(500).json({ message: 'Error desconocido al compartir receta' });
         }
     }
 });

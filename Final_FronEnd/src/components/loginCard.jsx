@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import axios from 'axios';  // Importamos Axios
+import { useNavigate } from 'react-router-dom';  // Para redirigir programáticamente
 
 const InicioSesion = () => {
   const [correo, setCorreo] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
+  const navigate = useNavigate();  // Hook para redirigir
 
   const handleSubmit = async (e) => {
     e.preventDefault();  // Evitar que el formulario recargue la página
@@ -18,8 +20,9 @@ const InicioSesion = () => {
       if (response.status === 200) {
         // Guardar el token JWT en localStorage
         localStorage.setItem('token', response.data.token);
+        localStorage.setItem('userId', response.data.userId); 
         alert('Inicio de sesión exitoso');
-        window.location.href = '/inicio';  // Redirigir al usuario al inicio
+        navigate('/bienvenida');  // Redirigir al usuario a la página de recetas
       } else {
         setError(response.data.message || 'Error al iniciar sesión');
       }
@@ -29,8 +32,35 @@ const InicioSesion = () => {
     }
   };
 
+  // Función para redirigir a la página de registro
+  const handleRegisterRedirect = () => {
+    navigate('/register');  // Redirigir a la página de registro
+  };
+
+  // Función para redirigir a la página de inicio
+  const handleHomeRedirect = () => {
+    navigate('/');  // Redirigir a la página de inicio
+  };
+
   return (
     <section className="max-w-md mx-auto p-6 bg-white rounded-md shadow-md">
+      {/* Botones de navegación */}
+      <div className="w-full flex justify-between mb-6">
+        <button
+          onClick={handleHomeRedirect}
+          className="bg-gray-200 text-gray-700 font-bold py-2 px-4 rounded"
+        >
+          Ir al Inicio
+        </button>
+        <button
+          onClick={handleRegisterRedirect}
+          className="bg-green-500 text-white font-bold py-2 px-4 rounded"
+        >
+          Registrarse
+        </button>
+      </div>
+
+      {/* Formulario de inicio de sesión */}
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
           <label className="block text-gray-700">
