@@ -7,9 +7,9 @@ Front y back(api y base de datos) de aplicativo web para guardar y compartir rec
 - la version de node que se utilizo fue: **node:20.13.0**
 
 
-1. Previsualizacion de la web.
-2. Configuracion para uzar el aplicativo con Docker.
-3. Configuracion para usarlo en visual studio y con base de datos mysql(como por ejemplo el mysql de xamp).
+### **1. Previsualizacion de la web.**
+### **2. Configuracion para uzar el aplicativo con Docker.**
+### **3. Configuracion para usarlo en visual studio y con base de datos mysql(como por ejemplo el mysql de xamp).**
 
 Antes de comenzar, asegúrate de tener instalado lo siguiente:
 
