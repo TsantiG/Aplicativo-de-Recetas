@@ -18,22 +18,42 @@ Antes de comenzar, asegúrate de tener instalado lo siguiente:
 - **Docker** (Opcional, si deseas ejecutar el proyecto con contenedores)
 
 1.  --------------------------------------------------------------------------------
+**INICIO**
+![Mi Banner](https://github.com/TsantiG/IMG/blob/main/INICIO.png?raw=true)
+
+**LOGIN**
+![Mi Banner](https://github.com/TsantiG/IMG/blob/main/LOGIN.png?raw=true)
+
+**SESION INICIADA**
+![Mi Banner](https://github.com/TsantiG/IMG/blob/main/INICIOSESION.png?raw=true)
+
+**VER RECETAS, CREACION, EDICION Y ELIMINACION**
+![Mi Banner](https://github.com/TsantiG/IMG/blob/main/VERRECETAS.png?raw=true)
+
+**SELECIONAR RECETAS PARA COMPARTIR Y VER RECETAS QUE YA ESTAN COMPARTIDAS**
+![Mi Banner](https://github.com/TsantiG/IMG/blob/main/COMPARTIR.png?raw=true)
+
+**VER TODAS LAS RECETAS COMPARTIDAS**
+![Mi Banner](https://github.com/TsantiG/IMG/blob/main/VERCOMPARTIDAS.png?raw=true)
+
+**VER RECETA YA COMPARTIDA**
+![Mi Banner](https://github.com/TsantiG/IMG/blob/main/VERYACOMPARTIDA.png?raw=true)
 
 2. --------------------------------------------------------------------------------
 ### Variables de entorno
 Debes crear un archivo `.env` en la raíz del proyecto de backend (`/backend`) con las siguientes variables de entorno:
 
 ---.env
-PORT=3000
-DB_HOST=db
-DB_PORT=3306
-DB_USER=tu_usuario 
-DB_PASSWORD=tu_contraseña
-DB_NAME=recetasdb
-CLOUDINARY_CLOUD_NAME=tu_cloudinary_cloud_name
-CLOUDINARY_API_KEY=tu_cloudinary_api_key
-CLOUDINARY_API_SECRET=tu_cloudinary_api_secret
-JWT_SECRET=tu_secreto_jwt
+- PORT=3000
+- DB_HOST=db
+- DB_PORT=3306
+- DB_USER=tu_usuario 
+- DB_PASSWORD=tu_contraseña
+- DB_NAME=recetasdb
+- CLOUDINARY_CLOUD_NAME=tu_cloudinary_cloud_name
+- CLOUDINARY_API_KEY=tu_cloudinary_api_key
+- CLOUDINARY_API_SECRET=tu_cloudinary_api_secret
+- JWT_SECRET=tu_secreto_jwt
 
 ### Importante:
 **La api ya cuenta con un `.env` pero esta orientado para ejecutarse en visual Studio y con mysql de xammp como base de datos, ademas ya cuenta con la union a mi clodinary (la informacion de mi cloudinary se cambiara cuando me califiquen)**
