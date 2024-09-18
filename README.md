@@ -15,8 +15,9 @@ Antes de comenzar, asegúrate de tener instalado lo siguiente:
 - **MySQL** 
 - **Docker** (Opcional, si deseas ejecutar el proyecto con contenedores)
 
-### **Previsualizacion de la web.**
+
 1.  --------------------------------------------------------------------------------
+### **Previsualizacion de la web.**
 **INICIO**
 ![Mi Banner](https://github.com/TsantiG/IMG/blob/main/INICIO.png?raw=true)
 
@@ -39,8 +40,10 @@ Antes de comenzar, asegúrate de tener instalado lo siguiente:
 ![Mi Banner](https://github.com/TsantiG/IMG/blob/main/VERYACOMPARTIDA.png?raw=true)
 
 
-### **Configuracion para uzar el aplicativo con Docker.**
+
 2. --------------------------------------------------------------------------------
+
+### **Configuracion para uzar el aplicativo con Docker.**
 ### Variables de entorno
 Debes crear un archivo `.env` en la raíz del proyecto de backend (`/backend`) con las siguientes variables de entorno:
 
@@ -70,8 +73,9 @@ El frontend estará disponible en http://localhost:3001.
 El backend estará disponible en http://localhost:3000.
 
 
-### ** Configuracion para usarlo en visual studio y con base de datos mysql(como por ejemplo el mysql de xamp).**
+
 3.  --------------------------------------------------------------------------------------------------------
+### ** Configuracion para usarlo en visual studio y con base de datos mysql(como por ejemplo el mysql de xamp).**
 ## configuracion back-end
 
 ### Instalacion de dependencias:
