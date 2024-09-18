@@ -1,8 +1,8 @@
 # Aplicativo-de-Recetas
-Front y back(api y base de datos) de aplicativo web para guardar y compartir recetas de cocina.   Utilizando Astro  y Tailwind para el front y TypeScript  para el back ademas de  doker para unirlos y usar mysql.
+Front y back(api y base de datos) de aplicativo web para guardar y compartir recetas de cocina.   Utilizando Astro  y Tailwind para el front y TypeScript  para el back ademas de  doker para unirlos (o con visual y mysql).
 
 ### Información adicional
-- El aplicativo utiliza Cloudinary para todo el tratamiento de imagenes. (esto incluye las que se usan en el from como las que ingresa el usuario)
+- El aplicativo utiliza Cloudinary para todo el tratamiento de imagenes. (esto incluye las que se usan en el front como las que ingresa el usuario)
 - Autenticación: La aplicación utiliza JWT para la autenticación.
 - la version de node que se utilizo fue: **node:20.13.0**
 
