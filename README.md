@@ -45,7 +45,7 @@ Antes de comenzar, asegúrate de tener instalado lo siguiente:
 
 ### **Configuracion para uzar el aplicativo con Docker.**
 ### Variables de entorno
-Debes crear un archivo `.env` en la raíz del proyecto de backend (`/backend`) con las siguientes variables de entorno:
+Debes modificar el archivo `.env` en la raíz del proyecto de backend (`/Final_backend`) con las siguientes variables de entorno:
 
 ---.env
 - PORT=3000
